@@ -16,17 +16,21 @@ const enabledSourceMap = MODE === 'development';
 
 // plugin
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 
 module.exports = {
   // モード指定
   mode: MODE,
   // メインとなるファイル（エントリーポイント）
-  entry: './src/ts/main.ts',
-  // 出力先
+  entry: {
+    'js/main': ['./src/ts/main.ts'],
+    'css/style': ['./src/scss/index.scss']
+  },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, './dist/')
+    path: path.resolve(__dirname, 'dist')
   },
+
   module: {
     rules: [
       {
@@ -86,6 +90,7 @@ module.exports = {
     extensions: ['.ts', '.js']
   },
   plugins: [
+    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css'
     })
